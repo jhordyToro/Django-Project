@@ -12,7 +12,7 @@ class Question(models.Model):
         return self.question_text
 
     def time_antique(self):
-        return self.pub_date >= timezone.now() - timedelta(days=1)
+        return timezone.now() >= self.pub_date >= timezone.now() - timedelta(days=1)
 
 class Choise(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE) 
