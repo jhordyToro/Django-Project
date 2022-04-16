@@ -8,6 +8,11 @@ from .models import Question
 
 # Create your tests here.
 
+def question_future_or_last(context, days):
+    time = timezone.now() + datetime.timedelta(days=days)
+    return Question.objects.create(question_text=context, pub_date=time)
+
+
 class QuestionModelTests(TestCase):
 
     def test_was_time_antique_with_date_future(self):
@@ -38,12 +43,22 @@ class QuestionIndexViewTest(TestCase):
         self.assertQuerysetEqual(result.context["questions"], [])
 
     
+    # def test_questions_with_future_pub_date(self):
+    #     """Questions with date greater to timezone.now shouldn't be displayed"""
+    #     time = timezone.now() + datetime.timedelta(days=30)
+    #     future_question = Question(question_text='manco xd', pub_date=time)
+    #     future_question.save()
+    #     result = self.client.get(reverse('polls:index'))
+    #     self.assertNotIn(future_question, result.context['questions'])
+
     def test_questions_with_future_pub_date(self):
-        """Questions with date greater to timezone.now shouldn't be displayed"""
-        time = timezone.now() + datetime.timedelta(days=30)
-        future_question = Question(question_text='manco xd', pub_date=time)
-        future_question.save()
+        """Questions with date greater to timezone.now shouldn't be displayed""" 
+        question_future_or_last('future question', 30)
         result = self.client.get(reverse('polls:index'))
-        self.assertNotIn(future_question, result.context['questions'])
+        self.assertContains(result, "sorry, Questions not found :(")
 
-
+    def test_question_with_last_pub_date(self):
+        """Questions with date greater to timezone.now shouldn't be displayed (last date)"""
+        request = question_future_or_last('future question', -30)
+        result = self.client.get(reverse('polls:index'))
+        self.assertQuerysetEqual(result.context['questions'], [request])
