@@ -18,22 +18,6 @@ def index(request):
     }
     return render(request, 'polls/index.html', context) 
 
-
-def detail(request, response_id):
-    question = get_object_or_404(Question,pk=response_id)
-    context = {
-        'question': question,
-    }
-    return render(request, 'polls/detail.html', context) 
-
-
-def result(request, response_id):
-    question = get_object_or_404(Question, pk=response_id)
-    return render(request, 'polls/result.html', {
-        "question": question,
-        'response_id': response_id,
-    })
-
 # class IndexView(generic.ListView):
 #     template_name = 'polls/index.html'
 #     context_object_name = 'questions'
@@ -43,14 +27,37 @@ def result(request, response_id):
 #         return Question.objects.order_by('-pub_date')[:5]
 
 
-# class DetailView(generic.DeleteView):
+def detail(request, response_id):
+    # question = get_object_or_404(Question,pk=response_id)
+    question = Question.objects.filter(pub_date__lte=timezone.now()).get(pk=response_id)
+    context = {
+        'question': question,
+    }
+    return render(request, 'polls/detail.html', context) 
+
+
+# class DetailView(generic.DetailView):
 #     model = Question
 #     template_name = 'polls/detail.html'
 
+#     def  get_queryset(self):
+#         return Question.objects.filter(pub_date__lte=timezone.now())
+
+
+def result(request, response_id):
+    question = Question.objects.filter(pub_date__lte=timezone.now()).get(pk=response_id)
+    return render(request, 'polls/result.html', {
+        "question": question,
+        'response_id': response_id,
+    })
 
 # class ResultView(generic.DetailView):
 #     model = Question
 #     template_name = 'polls/result.html'
+
+#     def get_queryset(self):
+#         return Question.objects.filter(pub_date__lte=timezone.now())
+
 
 
 def vote(request, response_id):
