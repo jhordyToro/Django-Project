@@ -1,27 +1,48 @@
-<form action="{% url 'polls:votes' question.id %}" method="post">
-{% csrf_token %}
-<fieldset>
-    <legend><h1>{{ question.question_text }}</h1></legend>
-    {% if error_message %}
-        
-        <p><strong>{{ error_message }}</strong></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon/Detail</title>
+</head>
+<body>
+    <header>
 
-    {% endif %}
-    {% for choise in question.choise_set.all %}
-        <input 
-            type="radio"
-            name='choise'
-            id="choise{{ forloop.counter }}"
-            value="{{ choise.id }}"
-        >
-        <label for="choise{{ forloop.counter }}">
-            {{ choise.choise_text }}
-        </label>
-        <br>
-    {% endfor %}
-</fieldset>
-<input type="submit" value="votar">
-</form>
+    </header>
+    <main>
+        <form action="{% url 'polls:votes' question.id %}" method="post">
+            {% csrf_token %}
+            <fieldset>
+                <legend><h1>{{ question.question_text }}</h1></legend>
+                {% if error_message %}
+                    
+                    <p><strong>{{ error_message }}</strong></p>
+            
+                {% endif %}
+                {% for choise in question.choise_set.all %}
+                    <input 
+                        type="radio"
+                        name='choise'
+                        id="choise{{ forloop.counter }}"
+                        value="{{ choise.id }}"
+                    >
+                    <label for="choise{{ forloop.counter }}">
+                        {{ choise.choise_text }}
+                    </label>
+                    <br>
+                {% endfor %}
+            </fieldset>
+            <input type="submit" value="votar">
+        </form>
+            
+    </main>
+    <footer>
+
+    </footer>
+</body>
+</html>
+
 
 
 

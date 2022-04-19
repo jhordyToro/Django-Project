@@ -1,9 +1,32 @@
-<h1>question.question_text</h1>
-{% for choise in question.choise_set.all %}
-    <ul>
-        <li>
-            {{choise.choise_text}} --- {{ choise.votes }} vote{{choise.votes|pluralize}}
-        </li>
-    </ul>
-{% endfor %}
-<a href="{% url 'polls:detail' response_id %}">volver a votar</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon/Result</title>
+</head>
+<body>
+    <header>
+        <h1>{{question.question_text}}</h1>
+    </header>
+    <main>
+        {% for choise in question.choise_set.all %}
+            <ul>
+                <li>
+                    {{choise.choise_text}} --- {{ choise.votes }} vote{{choise.votes|pluralize}}
+                </li>
+            </ul>
+        {% endfor %}
+        <a href="{% url 'polls:detail' response_id %}">volver a votar</a>
+    </main>
+    <footer>
+
+    </footer>
+</body>
+</html>
+
+
+
+
+
